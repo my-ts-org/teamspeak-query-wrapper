@@ -9,6 +9,23 @@ A secure PHP wrapper for TeamSpeak server owners to safely gather server informa
 - Data filtering capabilities
 - Debug logging
 - Easy to integrate with web applications
+- Secure configuration management
+- Protected sensitive data
+
+## Directory Structure
+
+```
+teamspeak-query-wrapper/
+├── config/                 # Configuration files (protected)
+│   └── config.php         # Main configuration file
+├── logs/                  # Log directory (protected)
+├── public/                # Public web root
+│   └── api.php           # Public API endpoint
+├── src/                   # Source code
+│   └── TeamSpeakQueryWrapper.php
+├── .gitignore
+└── README.md
+```
 
 ## Required Permissions
 
@@ -23,53 +40,60 @@ The wrapper requires the following TeamSpeak server permissions:
 
 ## Installation
 
-1. Download the files:
+1. Clone the repository:
 
-   - `TeamSpeakQueryWrapper.php`
-   - `api.php`
+   ```bash
+   git clone https://github.com/my-ts-org/teamspeak-query-wrapper.git
+   cd teamspeak-query-wrapper
+   ```
 
-2. Configure your TeamSpeak server:
+2. Configure your web server:
 
+   - Set the document root to the `public` directory
+   - Ensure the `config` and `logs` directories are not web-accessible
+   - Configure proper permissions for the `logs` directory
+
+3. Create configuration:
+
+   - Copy `config/config.example.php` to `config/config.php`
+   - Edit `config/config.php` with your settings:
+     ```php
+     return [
+         'teamspeak' => [
+             'host' => 'localhost',
+             'queryPort' => 10011,
+             'username' => 'your_username',
+             'password' => 'your_password'
+         ],
+         'webapp' => [
+             'endpoint' => 'https://your-webapp.com/api',
+             'apiKey' => 'your-api-key'
+         ],
+         'debug' => [
+             'enabled' => true,
+             'logFile' => __DIR__ . '/../logs/ts_wrapper.log'
+         ]
+     ];
+     ```
+
+4. Configure your TeamSpeak server:
    - Create a server query login
    - Assign the required permissions
    - Note down the username and password
 
-3. Configure the wrapper:
-   - Edit `api.php` with your server details
-   - Set up your webapp endpoint and API key
-
 ## Usage
 
-```php
-require_once 'TeamSpeakQueryWrapper.php';
-use TeamSpeakWrapper\TSQueryWrapper;
+Access the API endpoint in your browser or make a GET request to:
 
-$ts = new TSQueryWrapper(
-    'localhost',             // TeamSpeak server host
-    10011,                   // TeamSpeak query port
-    'serveradmin',           // TeamSpeak query username
-    'password',              // TeamSpeak query password
-    'https://your-webapp.com/api', // Your webapp endpoint
-    'your-api-key'           // Your API key
-);
-
-// Enable debug mode if needed
-$ts->setDebugMode(true, 'ts_wrapper.log');
-
-// Connect to the server
-if ($ts->connect()) {
-    // Get server information
-    $serverInfo = $ts->getServerInfo();
-    $channels = $ts->getChannelList();
-    $clients = $ts->getClientList();
-
-    // Send data to your webapp
-    $ts->sendDataToWebapp();
-
-    // Disconnect
-    $ts->disconnect();
-}
 ```
+http://your-server.com/api.php
+```
+
+The API will return a JSON response containing:
+
+- Server information
+- Channel list
+- Client list
 
 ## Data Filtering
 
@@ -87,11 +111,49 @@ $ts->setDataFilter(function($data) {
 
 ## Security
 
-- The wrapper uses minimal required permissions
+- Configuration files are protected outside the web root
+- Log files are stored in a protected directory
+- Source code is not directly accessible
+- Only the public API endpoint is exposed
+- Minimal required permissions for TeamSpeak server
 - All data can be filtered before sending
 - Debug mode helps identify issues
 - Connection timeouts prevent hanging
 - Error handling for failed connections
+
+## Web Server Configuration
+
+### Apache
+
+Add this to your `.htaccess` in the root directory:
+
+```apache
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+    RewriteRule ^$ public/ [L]
+    RewriteRule (.*) public/$1 [L]
+</IfModule>
+```
+
+### Nginx
+
+Update your server configuration:
+
+```nginx
+server {
+    root /path/to/teamspeak-query-wrapper/public;
+    index index.php;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php7.4-fpm.sock;
+    }
+}
+```
 
 ## License
 
