@@ -12,9 +12,9 @@ $config = [
     'host' => 'localhost', // Change this to your TeamSpeak server IP
     'queryPort' => 10011,  // Default TeamSpeak Query port
     'username' => 'serveradmin',      // Set your query username
-    'password' => 'lfRYaFRf',      // Set your query password
+    'password' => 'yourpassword',      // Set your query password
     'webappEndpoint' => 'http://mitbringsel.local/installer/api.php', // Your webapp endpoint
-    'apiKey' => '1234567890'         // Your API key
+    'apiKey' => '1234567890'         // Your API key (from my-ts.org)
 ];
 
 // Set error reporting
@@ -66,4 +66,4 @@ try {
     if (isset($ts)) {
         $ts->disconnect();
     }
-} 
+}
