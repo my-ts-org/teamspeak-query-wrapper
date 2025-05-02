@@ -11,6 +11,9 @@ A secure PHP wrapper for TeamSpeak server owners to safely gather server informa
 - Easy to integrate with web applications
 - Secure configuration management
 - Protected sensitive data
+- Automatic API key generation
+- Secure API authentication
+- Multiple authentication methods
 
 ## Directory Structure
 
@@ -54,6 +57,7 @@ You may use your existing serveradmin query account for authentication. Since th
    - Set the document root to the `public` directory
    - Ensure the `config` and `logs` directories are not web-accessible
    - Configure proper permissions for the `logs` directory
+   - Ensure the web server has write permissions to the `config` directory
 
 3. Create configuration:
 
@@ -69,7 +73,7 @@ You may use your existing serveradmin query account for authentication. Since th
          ],
          'webapp' => [
              'endpoint' => 'https://your-webapp.com/api',
-             'apiKey' => 'your-api-key'
+             'apiKey' => ''  // Leave empty for automatic generation
          ],
          'debug' => [
              'enabled' => true,
@@ -87,10 +91,31 @@ You may use your existing serveradmin query account for authentication. Since th
 
 ## Usage
 
-Access the API endpoint in your browser or make a GET request to:
+Make a POST request to the API endpoint using one of the following authentication methods:
 
+### 1. Using JSON Body (Recommended)
+
+```bash
+curl -X POST \
+  -H "Content-Type: application/json" \
+  -d "{\"api_key\":\"your-api-key\"}" \
+  http://your-server.com/api.php
 ```
-http://your-server.com/api.php
+
+### 2. Using Form Data
+
+```bash
+curl -X POST \
+  -F "api_key=your-api-key" \
+  http://your-server.com/api.php
+```
+
+### 3. Using Custom Header
+
+```bash
+curl -X POST \
+  -H "X-API-Key: your-api-key" \
+  http://your-server.com/api.php
 ```
 
 The API will return a JSON response containing:
@@ -98,6 +123,31 @@ The API will return a JSON response containing:
 - Server information
 - Channel list
 - Client list
+
+### API Authentication
+
+The API endpoint requires authentication using one of the following methods:
+
+1. JSON body with `api_key` field
+2. Form data with `api_key` field
+3. Custom header `X-API-Key`
+
+The API key must match the one stored in your configuration file.
+
+### Automatic API Key Generation
+
+The wrapper will automatically generate a secure API key when:
+
+1. The API key is empty in the configuration
+2. The API key is set to the default value ('1234567890')
+
+The generated key will be:
+
+- 64 characters long
+- Cryptographically secure
+- Automatically saved to the configuration file
+
+You can use this API key to authenticate requests to your web application.
 
 ## Data Filtering
 
@@ -124,6 +174,12 @@ $ts->setDataFilter(function($data) {
 - Debug mode helps identify issues
 - Connection timeouts prevent hanging
 - Error handling for failed connections
+- Secure API key generation and management
+- POST-only API endpoint
+- API key authentication required
+- JSON request body validation
+- Multiple authentication methods supported
+- Debug information available when enabled
 
 ## Web Server Configuration
 
