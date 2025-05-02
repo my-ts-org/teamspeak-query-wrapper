@@ -5,16 +5,19 @@ header('Access-Control-Allow-Methods: GET');
 
 require_once 'TeamSpeakQueryWrapper.php';
 
+// Load configuration
+$env = require 'config.env.php';
+
 use TeamSpeakWrapper\TSQueryWrapper;
 
 // Configuration
 $config = [
-    'host' => 'localhost', // Change this to your TeamSpeak server IP
-    'queryPort' => 10011,  // Default TeamSpeak Query port
-    'username' => 'serveradmin',      // Set your query username
-    'password' => 'yourpassword',      // Set your query password
-    'webappEndpoint' => 'http://mitbringsel.local/installer/api.php', // Your webapp endpoint
-    'apiKey' => '1234567890'         // Your API key (from my-ts.org)
+    'host' => $env['TEAMSPEAK_HOST'],
+    'queryPort' => (int) $env['TEAMSPEAK_QUERY_PORT'],
+    'username' => $env['TEAMSPEAK_USERNAME'],
+    'password' => $env['TEAMSPEAK_PASSWORD'],
+    'webappEndpoint' => $env['WEBAPP_ENDPOINT'],
+    'apiKey' => $env['API_KEY']
 ];
 
 // Set error reporting
