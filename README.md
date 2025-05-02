@@ -38,6 +38,8 @@ The wrapper requires the following TeamSpeak server permissions:
 - `b_serverquery_login`
 - `b_client_create_modify_serverquery_login`
 
+You may use your existing serveradmin query account for authentication. Since the wrapper runs on your own server, your credentials remain secure and are never exposed externally.
+
 ## Installation
 
 1. Clone the repository:
