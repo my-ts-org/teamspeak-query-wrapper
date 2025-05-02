@@ -76,7 +76,7 @@ You may use your existing serveradmin query account for authentication. Since th
              'apiKey' => ''  // Leave empty for automatic generation
          ],
          'debug' => [
-             'enabled' => true,
+             'enabled' => false,  // Set to true only during testing
              'logFile' => __DIR__ . '/../logs/ts_wrapper.log'
          ]
      ];
@@ -134,6 +134,20 @@ The API endpoint requires authentication using one of the following methods:
 
 The API key must match the one stored in your configuration file.
 
+### Debug Mode
+
+⚠️ **IMPORTANT SECURITY NOTICE**: Debug mode should only be enabled during testing and development. When enabled, it:
+
+- Exposes sensitive information in error responses
+- Logs detailed information about requests
+- May reveal API keys and other sensitive data
+
+To disable debug mode in production:
+
+1. Open `config/config.php`
+2. Set `'enabled' => false` in the debug section
+3. Ensure the log file is not web-accessible
+
 ### Automatic API Key Generation
 
 The wrapper will automatically generate a secure API key when:
@@ -171,7 +185,7 @@ $ts->setDataFilter(function($data) {
 - Only the public API endpoint is exposed
 - Minimal required permissions for TeamSpeak server
 - All data can be filtered before sending
-- Debug mode helps identify issues
+- Debug mode helps identify issues (disable in production)
 - Connection timeouts prevent hanging
 - Error handling for failed connections
 - Secure API key generation and management
@@ -179,7 +193,7 @@ $ts->setDataFilter(function($data) {
 - API key authentication required
 - JSON request body validation
 - Multiple authentication methods supported
-- Debug information available when enabled
+- Debug information available when enabled (disable in production)
 
 ## Web Server Configuration
 
