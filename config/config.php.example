@@ -1,0 +1,23 @@
+<?php
+/**
+ * TeamSpeak Query Wrapper Configuration
+ * 
+ * This file contains sensitive configuration settings.
+ */
+
+return [
+    'teamspeak' => [
+        'host' => 'localhost', // TeamSpeak server host
+        'queryPort' => 10011, // TeamSpeak query port
+        'username' => 'serveradmin', // TeamSpeak query username
+        'password' => 'yourpassword' // TeamSpeak query password
+    ],
+    'webapp' => [
+        'endpoint' => 'https://yourdomain.com/api.php',
+        'apiKey' => '1234567890'
+    ],
+    'debug' => [
+        'enabled' => true,
+        'logFile' => __DIR__ . '/../logs/ts_wrapper.log'
+    ]
+]; 

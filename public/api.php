@@ -3,39 +3,16 @@ header('Content-Type: application/json');
 header('Access-Control-Allow-Origin: *');
 header('Access-Control-Allow-Methods: GET');
 
-require_once 'TeamSpeakQueryWrapper.php';
+// Load configuration
+$config = require_once __DIR__ . '/../config/config.php';
+
+// Load the wrapper
+require_once __DIR__ . '/../src/TeamSpeakQueryWrapper.php';
 
 use TeamSpeakWrapper\TSQueryWrapper;
 
-// Configuration
-$config = [
-    'host' => 'localhost', // Change this to your TeamSpeak server IP
-    'queryPort' => 10011,  // Default TeamSpeak Query port
-    'username' => 'serveradmin',      // Set your query username
-    'password' => 'lfRYaFRf',      // Set your query password
-    'webappEndpoint' => 'http://mitbringsel.local/installer/api.php', // Your webapp endpoint
-    'apiKey' => '1234567890'         // Your API key
-];
-
-// Set error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
-
-// Set timeout
-set_time_limit(30); // 30 seconds timeout
-
 try {
-    $ts = new TSQueryWrapper(
-        $config['host'],
-        $config['queryPort'],
-        $config['username'],
-        $config['password'],
-        $config['webappEndpoint'],
-        $config['apiKey']
-    );
-
-    // Enable debug mode
-    $ts->setDebugMode(true, 'ts_wrapper.log');
+    $ts = new TSQueryWrapper($config);
 
     // Try to connect with a timeout
     if (!$ts->connect()) {
