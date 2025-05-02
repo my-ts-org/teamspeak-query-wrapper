@@ -4,7 +4,12 @@
 *.sublime-project
 *.sublime-workspace
 
+# Configuration and sensitive files
+/config/config.php
+/config/*.local.php
+
 # Log files
+/logs/
 *.log
 ts_wrapper.log
 
@@ -12,7 +17,6 @@ ts_wrapper.log
 .env
 .env.local
 .env.*.local
-config.env.php
 
 # Composer
 /vendor/

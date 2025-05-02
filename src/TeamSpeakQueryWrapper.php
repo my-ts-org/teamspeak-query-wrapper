@@ -32,29 +32,19 @@ class TSQueryWrapper {
     /**
      * Constructor
      * 
-     * @param string $host TeamSpeak server host
-     * @param int $queryPort TeamSpeak server query port (default: 10011)
-     * @param string $username TeamSpeak server query username
-     * @param string $password TeamSpeak server query password
-     * @param string $webappEndpoint The endpoint to send data to
-     * @param string $apiKey API key for authentication with your webapp
+     * @param array $config Configuration array
      */
-    public function __construct(
-        string $host,
-        int $queryPort = 10011,
-        string $username,
-        string $password,
-        string $webappEndpoint,
-        string $apiKey
-    ) {
-        $this->host = $host;
-        $this->queryPort = $queryPort;
-        $this->username = $username;
-        $this->password = $password;
-        $this->webappEndpoint = $webappEndpoint;
-        $this->apiKey = $apiKey;
+    public function __construct(array $config)
+    {
+        $this->host = $config['teamspeak']['host'];
+        $this->queryPort = $config['teamspeak']['queryPort'];
+        $this->username = $config['teamspeak']['username'];
+        $this->password = $config['teamspeak']['password'];
+        $this->webappEndpoint = $config['webapp']['endpoint'];
+        $this->apiKey = $config['webapp']['apiKey'];
+        $this->debugMode = $config['debug']['enabled'];
+        $this->logFile = $config['debug']['logFile'];
     }
-    
     /**
      * Enable debug mode
      * 
