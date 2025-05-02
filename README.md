@@ -83,6 +83,8 @@ You may use your existing serveradmin query account for authentication. Since th
    - Assign the required permissions
    - Note down the username and password
 
+You may use your existing serveradmin query account for authentication. Since the wrapper runs on your own server, your credentials remain secure and are never exposed externally.
+
 ## Usage
 
 Access the API endpoint in your browser or make a GET request to:
